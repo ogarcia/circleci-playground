@@ -1,0 +1,58 @@
+version: 2.1
+
+executors:
+  docker-cimg-base:
+    docker:
+      - image: cimg/base:stable
+
+jobs:
+  build:
+    executor: docker-cimg-base
+    parameters:
+      matrix-tag:
+        type: string
+        default: matrix
+    environment:
+      MATRIX_TAG: << parameters.matrix-tag >>
+    steps:
+      - checkout
+      - run:
+          name: Do something
+          command: echo ${MATRIX_TAG}
+  test:
+    executor: docker-cimg-base
+    parameters:
+      matrix-tag:
+        type: string
+        default: matrix
+    environment:
+      MATRIX_TAG: << parameters.matrix-tag >>
+    steps:
+      - checkout
+      - run:
+          name: Do something
+          command: echo ${MATRIX_TAG}
+
+workflows:
+  build-test:
+    jobs:
+      - build:
+          matrix:
+            parameters:
+              matrix-tag:
+                - alice
+                - bob
+                - charlie
+                - daniel
+                - eloise
+      - test:
+          matrix:
+            parameters:
+              matrix-tag:
+                - alice
+                - bob
+                - charlie
+                - daniel
+                - eloise
+          requires:
+            - build-<< parameters.matrix-tag >>
