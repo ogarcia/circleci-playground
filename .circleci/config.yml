@@ -55,4 +55,4 @@ workflows:
                 - daniel
                 - eloise
           requires:
-            - build-<< parameters.matrix-tag >>
+            - build-<< matrix.matrix-tag >>
