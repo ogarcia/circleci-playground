@@ -1,0 +1,22 @@
+version: 2.1
+
+executors:
+  docker-cimg-base:
+    docker:
+      - image: cimg/base:stable
+
+jobs:
+  build:
+    executor: docker-cimg-base
+    steps:
+      - setup_remote_docker:
+          version: 20.10.18
+      - checkout
+      - run:
+          name: Do something
+          command: docker buildx build --platform linux/arm/v7,linux/arm64,linux/amd64 --tag test/test .
+
+workflows:
+  build-test:
+    jobs:
+      - build:
